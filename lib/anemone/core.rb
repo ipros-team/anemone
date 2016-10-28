@@ -155,7 +155,7 @@ module Anemone
       page_queue = Queue.new
 
       @opts[:threads].times do
-        @tentacles << Thread.new { Tentacle.new(link_queue, page_queue, @opts).run }
+        @tentacles << Thread.new { Tentacle.new(link_queue, page_queue, @opts, @robots).run }
       end
 
       @urls.each{ |url| link_queue.enq(url) }

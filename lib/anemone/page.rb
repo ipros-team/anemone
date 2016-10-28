@@ -54,7 +54,7 @@ module Anemone
     #
     # Array of distinct A tag HREFs from the page
     #
-    def links
+    def links(exclude_nofollow: false)
       return @links unless @links.nil?
       @links = []
       return @links if !doc
@@ -62,6 +62,7 @@ module Anemone
       doc.search("//a[@href]").each do |a|
         u = a['href']
         next if u.nil? or u.empty?
+        next if exclude_nofollow && a['rel'] == 'nofollow'
         abs = to_absolute(u) rescue next
         @links << abs if in_domain?(abs)
       end

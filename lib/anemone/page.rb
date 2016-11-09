@@ -1,6 +1,7 @@
 require 'nokogiri'
 require 'ostruct'
 require 'webrick/cookie'
+require 'kconv'
 
 module Anemone
   class Page
@@ -75,7 +76,19 @@ module Anemone
     #
     def doc
       return @doc if @doc
-      @doc = Nokogiri::HTML(@body.force_encoding('UTF-8')) if @body && html? rescue nil
+      if @body.nil?
+        body_encoding = nil
+      elsif @body.isutf8
+        body_encoding = "UTF-8"
+      elsif @body.issjis
+        body_encoding = "Shift_JIS"
+      elsif @body.iseuc
+        body_encoding = "EUC-JP"
+      end
+      if @body && html?
+        @body = @body.encode('SJIS', 'UTF-8', invalid: :replace, undef: :replace, replace: '').encode('UTF-8')
+        @doc = Nokogiri::HTML(@body, url = nil, encoding = body_encoding) rescue nil
+      end
     end
 
     #

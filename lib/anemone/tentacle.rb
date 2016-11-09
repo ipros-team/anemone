@@ -2,7 +2,7 @@ require 'anemone/http'
 
 module Anemone
   class Tentacle
-
+    MAX_DELAY = 30
     #
     # Create a new Tentacle
     #
@@ -38,7 +38,9 @@ module Anemone
       else
         if @robots
           robots_delay = @robots.delay(link)
-          sleep robots_delay if robots_delay
+          if robots_delay
+            sleep (robots_delay > MAX_DELAY ? MAX_DELAY : robots_delay)
+          end
         end
       end
     end

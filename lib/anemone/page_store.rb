@@ -17,7 +17,7 @@ module Anemone
     end
 
     def []=(index, other)
-      @storage[index.to_s] = other
+      @storage[index.to_s] = true
     end
 
     def delete(key)

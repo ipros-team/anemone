@@ -7,6 +7,7 @@ module Anemone
     def_delegators :@storage, :keys, :values, :size, :each
 
     def initialize(storage = {})
+      @use_memory_buffer = (storage.instance_variable_get(:@adap) == {})
       @storage = storage
     end
 
@@ -17,7 +18,7 @@ module Anemone
     end
 
     def []=(index, other)
-      @storage[index.to_s] = true
+      @storage[index.to_s] = (@use_memory_buffer ? true : other)
     end
 
     def delete(key)

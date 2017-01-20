@@ -86,7 +86,6 @@ module Anemone
         body_encoding = "EUC-JP"
       end
       if @body && html?
-        @body = @body.encode('SJIS', 'UTF-8', invalid: :replace, undef: :replace, replace: '').encode('UTF-8')
         @doc = Nokogiri::HTML(@body, url = nil, encoding = body_encoding) rescue nil
       end
     end
